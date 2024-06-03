@@ -1,0 +1,52 @@
+[
+    {
+      "id": "1",
+      "ville": "Aïn Harrouda",
+      "region": "6"
+    },
+    {
+      "id": "2",
+      "ville": "Ben Yakhlef",
+      "region": "6"
+    },
+    {
+      "id": "3",
+      "ville": "Bouskoura",
+      "region": "6"
+    },
+    {
+      "id": "4",
+      "ville": "Casablanca",
+      "region": "6"
+    },
+    {
+      "id": "5",
+      "ville": "Médiouna",
+      "region": "6"
+    },
+    {
+      "id": "6",
+      "ville": "Mohammadia",
+      "region": "6"
+    },
+    {
+      "id": "7",
+      "ville": "Tit Mellil",
+      "region": "6"
+    },
+    {
+      "id": "8",
+      "ville": "Ben Yakhlef",
+      "region": "6"
+    },
+    {
+      "id": "9",
+      "ville": "Bejaâd",
+      "region": "5"
+    },
+    {
+      "id": "10",
+      "ville": "Ben Ahmed",
+      "region": "6"
+    }
+  ]
