@@ -84,7 +84,7 @@ function Addm() {
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={closeModal}></div>
-                    <div className="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow-lg z-50">
+                    <div className="relative p-4 w-full sm:max-w-[40rem]  max-h-full bg-white rounded-lg shadow-lg z-50">
                         <div className="flex items-left  pl-2 pb-2 border-b rounded-t">
                             <h3 className="text-xl font-semibold text-gray-900">
                                 Add Member
@@ -118,7 +118,7 @@ function Addm() {
 
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
-                                        <label htmlFor="Sexe" className="block mb-2 text-sm font-medium text-gray-900">Sexe</label>
+                                        <label htmlFor="Sexe" className="block mb-2 text-sm font-medium text-gray-900">Gender</label>
                                         <select
                                             value={sexe} onChange={(e) => setSexe(e.target.value)}
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
@@ -126,7 +126,7 @@ function Addm() {
                                             <option value="">Select Sexe</option>
                                             <option value="Man">Man</option>
                                             <option value="Women">Women</option>
-                                            <option value="Non-binary">Non-binary</option>
+
                                         </select>
                                     </div>
                                     <div className="flex-1">

@@ -12,18 +12,26 @@ const Members = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [memberToDelete, setMemberToDelete] = useState(null);
+    const [subscriptionType, setSubscriptionType] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
             .then(response => {
-                const sortedMembers = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                let sortedMembers = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                if (subscriptionType) {
+                    sortedMembers = sortedMembers.filter(member => member.subscription === subscriptionType);
+                }
                 setMembers(sortedMembers);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [subscriptionType]);
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
+    };
+
+    const handleSubscriptionChange = (e) => {
+        setSubscriptionType(e.target.value);
     };
 
     const handleMoreClick = (id) => {
@@ -87,6 +95,16 @@ const Members = () => {
                                 onChange={handleSearchChange}
                                 autoComplete="off"
                             />
+                            <select
+                                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-40 ml-2 p-2.5"
+                                value={subscriptionType}
+                                onChange={handleSubscriptionChange}
+                                required>
+                                <option value="">All Subscription</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Quarterly">Quarterly</option>
+                                <option value="Yearly">Yearly</option>
+                            </select>
                             <button
                                 type="button"
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"
@@ -108,6 +126,8 @@ const Members = () => {
                                             </div>
                                             <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Subscription :</span> {member.subscription}</p>
                                             <p className="mt-1 truncate text-sm text-gray-500">Joined At :  {new Date(member.created_at).toISOString().split('T')[0]}</p>
+                                            <p className="mt-1 truncate text-sm text-gray-500">Update At :  {new Date(member.updated_at).toISOString().split('T')[0]}</p>
+
                                             <p className="mt-1 truncate text-sm text-gray-500">Phone Number : {member.phone}</p>
                                         </div>
                                         <img className="h-20 w-20 flex-shrink-0 rounded-full bg-gray-300" src={`http://localhost:8000/images/${member.imagemembers}`} alt={member.imagemembers} />
@@ -132,7 +152,6 @@ const Members = () => {
                     </div>
                 </div>
             </div>
-
             {showDeleteModal && (
                 <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50 backdrop-blur-sm">
                     <div className="relative p-4 w-full max-w-md max-h-full">

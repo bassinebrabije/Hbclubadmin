@@ -3,6 +3,8 @@ import Coachs from "./components/Coachs";
 import Members from "./components/Members";
 import Layout from "./components/Layout";
 import Trainers from "./components/Trainers";
+import Request from "./components/Request";
+import Login from "./components/login";
 import DownloadPDFButton from './components/DownloadPDFButton';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -11,13 +13,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <BrowserRouter>
-
+      {/* <Login /> */}
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="Coachs" element={<Coachs />} />
           <Route path="Members" element={<Members />} />
           <Route path="Trainers" element={<Trainers />} />
+          <Route path="Request" element={<Request />} />
         </Route>
       </Routes>
     </BrowserRouter>

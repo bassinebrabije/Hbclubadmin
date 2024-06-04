@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Formaddt from './pupup/Addt'
+import Updatet from './pupup/Updatet'
 const Trainers = () => {
 
     const [trainers, setTrainers] = useState([]);
@@ -150,6 +151,7 @@ const Trainers = () => {
                     </div>
                 </div>
             )}
+            <Updatet isModalOpen={isModalOpen} closeModal={closeModal} trainerId={selectedTrainerId} />
 
             <Formaddt />
         </div>

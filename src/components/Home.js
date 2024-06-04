@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { Link } from "react-router-dom";
 
-const Trainers = () => {
+const Home = () => {
 
     const [requestCount, setRequestCount] = useState(0);
 
@@ -141,4 +141,4 @@ const Trainers = () => {
     </div>;
 };
 
-export default Trainers;
+export default Home;
