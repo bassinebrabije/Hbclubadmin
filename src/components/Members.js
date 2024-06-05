@@ -4,6 +4,8 @@ import axios from 'axios';
 import Formaddm from './pupup/Addm';
 import Updatem from './pupup/Updatem';
 
+import PDFM from './pdf/Memberspdf';
+
 const Members = () => {
 
     const [members, setMembers] = useState([]);
@@ -105,8 +107,8 @@ const Members = () => {
                                 <option value="Quarterly">Quarterly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
-                            <button
-                                type="button"
+                            <button onClick={PDFM}
+
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"
                             >
                                 <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
