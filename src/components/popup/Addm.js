@@ -7,12 +7,13 @@ function Addm() {
     const [fname, setFname] = useState('');
     const [lastname, setLastname] = useState('');
     const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     const [ville, setVille] = useState('');
     const [sexe, setSexe] = useState('');
     const [subscription, setSubscription] = useState('');
     const [imagemembers, setImagemembers] = useState(null);
     const [image, setImage] = useState(null);
-
+    const [showAlert, setShowAlert] = useState(false);
     const [villes, setvilles] = useState([]);
 
     const openModal = () => {
@@ -33,6 +34,7 @@ function Addm() {
         formData.append('fname', fname);
         formData.append('lname', lastname);
         formData.append('phone', phone);
+        formData.append('email', email);
         formData.append('ville', ville);
         formData.append('sexe', sexe);
         formData.append('subscription', subscription);
@@ -46,12 +48,18 @@ function Addm() {
             setFname('');
             setLastname('');
             setPhone('');
+            setEmail('');
             setVille('');
             setSexe('');
             setSubscription('');
             setImagemembers(null);
-            alert('member added successfully!');
-            window.location.href = '/Members';
+
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+                window.location.href = '/Members';
+            }, 8000);
+            closeModal();
         }).catch(error => {
             console.error('There was an error!', error);
         });
@@ -102,18 +110,25 @@ function Addm() {
                                         <input type="text" value={lastname} onChange={(e) => setLastname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="Last name" required />
                                     </div>
                                 </div>
-                                <div>
-                                    <label htmlFor="ville" className="block mb-2 text-sm font-medium text-gray-900">Ville</label>
-                                    <select
-                                        value={ville} onChange={(e) => setVille(e.target.value)}
-                                        className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-                                        required
-                                    >
-                                        <option value="">Select Ville </option>
-                                        {villes.map((ville) => (
-                                            <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
-                                        ))}
-                                    </select>
+
+                                <div className="flex space-x-4">
+                                    <div className="flex-1">
+                                        <label htmlFor="ville" className="block mb-2 text-sm font-medium text-gray-900">Ville</label>
+                                        <select
+                                            value={ville} onChange={(e) => setVille(e.target.value)}
+                                            className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+                                            required
+                                        >
+                                            <option value="">Select Ville </option>
+                                            {villes.map((ville) => (
+                                                <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
+                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="Last name" required />
+                                    </div>
                                 </div>
 
                                 <div className="flex space-x-4">
@@ -136,7 +151,7 @@ function Addm() {
                                 </div>
                                 <div>
                                 </div>
-                                <div>
+                                <div >
                                     <label htmlFor="subscription" className="block mb-2 text-sm font-medium text-gray-900">Subscription</label>
                                     <select
                                         value={subscription} onChange={(e) => setSubscription(e.target.value)}
@@ -187,7 +202,30 @@ function Addm() {
                     </div>
                 </div>
             )}
+            {showAlert && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-lg">
+                        <div className="mt-3 text-center">
+                            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-white border border-[#FF0000] ">
+                                <svg className="h-6 w-6 " fill="none" stroke="#FF0000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <h3 className="text-lg leading-6 font-medium text-gray-900 mt-3">Successfull</h3>
+                            <div className=" px-7 py-3">
+                                <p className="text-sm font-medium text-[#000] tracking-wides">Member added successfully! .</p>
+                            </div>
+                            <div className="items-center px-4 py-3 ">
 
+                                <a href="/Members" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm  ">
+                                    OK
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     )
 }

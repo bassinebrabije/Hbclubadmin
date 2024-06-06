@@ -7,12 +7,13 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     const [ville, setVille] = useState('');
     const [sexe, setSexe] = useState('');
     const [subscription, setSubscription] = useState('');
     const [imagemembers, setImagemembers] = useState(null);
     const [createdAt, setCreatedAt] = useState('');
-
+    const [showAlert, setShowAlert] = useState(false);
 
 
 
@@ -27,6 +28,7 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                     setFname(response.data.fname);
                     setLname(response.data.lname);
                     setPhone(response.data.phone);
+                    setEmail(response.data.email);
                     setVille(response.data.ville);
                     setSexe(response.data.sexe);
                     setSubscription(response.data.subscription);
@@ -49,6 +51,7 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
             fname: fname,
             lname: lname,
             phone: phone,
+            email: email,
             ville: ville,
             subscription: subscription,
             sexe: sexe,
@@ -56,8 +59,11 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
         };
         axios.put(`http://localhost:8000/api/members/${memberId}`, formData)
             .then(response => {
-                alert('Member updated successfully!');
-                window.location.href = '/Members';
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                    window.location.href = '/Members';
+                }, 8000);
                 closeModal();
             })
             .catch(error => {
@@ -91,11 +97,11 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="fname" className="block mb-2 text-sm font-medium text-gray-900">First name</label>
-                                        <input type="text" name="fname" value={fname} onChange={(e) => setFname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="First name" required />
+                                        <input type="text" value={fname} onChange={(e) => setFname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="First name" required />
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="lname" className="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
-                                        <input type="text" name="lname" value={lname} onChange={(e) => setLname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Last name" required />
+                                        <input type="text" value={lname} onChange={(e) => setLname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Last name" required />
                                     </div>
                                 </div>
                                 <div className="flex space-x-4">
@@ -107,6 +113,10 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                                                 <option key={ville.ville} value={ville.ville}>{ville.ville}</option>
                                             ))}
                                         </select>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
+                                        <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Last name" required />
                                     </div>
                                 </div>
                                 <div className="flex space-x-4">
@@ -140,6 +150,30 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                                 </div>
 
                             </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showAlert && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-lg">
+                        <div className="mt-3 text-center">
+                            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-white border border-[#FF0000] ">
+                                <svg className="h-6 w-6 " fill="none" stroke="#FF0000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <h3 className="text-lg leading-6 font-medium text-gray-900 mt-3">Successfull</h3>
+                            <div className=" px-7 py-3">
+                                <p className="text-sm font-medium text-[#000] tracking-wides">Member updated successfully! .</p>
+                            </div>
+                            <div className="items-center px-4 py-3 ">
+
+                                <a href="/Members" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm  ">
+                                    OK
+                                </a>
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -16,7 +16,7 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
     const [about, setAbout] = useState('');
     const [imagetrainers, setImgtrainers] = useState(null);
     const [createdAt, setCreatedAt] = useState('');
-
+    const [showAlert, setShowAlert] = useState(false);
 
 
 
@@ -62,9 +62,13 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
         };
         axios.put(`http://localhost:8000/api/trainers/${trainerId}`, formData)
             .then(response => {
-                alert('Trainer updated successfully!');
-                window.location.href = '/Trainers';
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                    window.location.href = '/Trainers';
+                }, 8000);
                 closeModal();
+
             })
             .catch(error => {
                 console.error('There was an error!', error.response.data);
@@ -141,6 +145,31 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
                                 </div>
 
                             </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showAlert && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="bg-white rounded-lg">
+                        <div className="mt-3 text-center">
+                            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-white border border-[#FF0000] ">
+                                <svg className="h-6 w-6 " fill="none" stroke="#FF0000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <h3 className="text-lg leading-6 font-medium text-gray-900 mt-3">Successfull</h3>
+                            <div className=" px-7 py-3">
+                                <p className="text-sm font-medium text-[#000] tracking-wides">Trainer updated successfully! .</p>
+                            </div>
+                            <div className="items-center px-4 py-3 ">
+
+                                <a href="/Trainers" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm  ">
+                                    OK
+                                </a>
+
+                            </div>
                         </div>
                     </div>
                 </div>

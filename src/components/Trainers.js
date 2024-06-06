@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Formaddt from './pupup/Addt'
-import Updatet from './pupup/Updatet'
+import Formaddt from './popup/Addt'
+import Updatet from './popup/Updatet'
 
 import PDFT from './pdf/Trainerspdf';
 const Trainers = () => {

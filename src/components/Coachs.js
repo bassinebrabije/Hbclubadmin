@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Formaddc from './pupup/Addt'
+import Formaddc from './popup/Addt'
 
 const Coachs = () => {
     const [searchTerm, setSearchTerm] = useState('');

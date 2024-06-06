@@ -5,7 +5,6 @@ import Layout from "./components/Layout";
 import Trainers from "./components/Trainers";
 import Request from "./components/Request";
 import Login from "./components/login";
-import DownloadPDFButton from './components/DownloadPDFButton';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
