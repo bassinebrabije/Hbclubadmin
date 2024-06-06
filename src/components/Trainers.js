@@ -4,6 +4,7 @@ import Formaddt from './popup/Addt'
 import Updatet from './popup/Updatet'
 
 import PDFT from './pdf/Trainerspdf';
+
 const Trainers = () => {
 
     const [trainers, setTrainers] = useState([]);
@@ -56,10 +57,23 @@ const Trainers = () => {
         setTrainerToDelete(null);
     };
 
-    const filteredTrainers = trainers.filter(trainer =>
-        trainer.fname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        trainer.lastname.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+
+
+
+    const searchTerms = searchQuery.toLowerCase().split(' ');
+
+    const filteredTrainers = trainers.filter(trainer => {
+        const fname = trainer.fname.toLowerCase();
+        const lastname = trainer.lastname.toLowerCase();
+        return searchTerms.every(term =>
+            fname.includes(term) ||
+            lastname.includes(term)
+
+        );
+    });
+
+
+
 
 
     return <>

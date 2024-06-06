@@ -68,10 +68,17 @@ const Members = () => {
         setMemberToDelete(null);
     };
 
-    const filteredMembers = members.filter(member =>
-        member.fname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        member.lname.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const searchTerms = searchQuery.toLowerCase().split(' ');
+    const filteredMembers = members.filter(member => {
+        const fname = member.fname.toLowerCase();
+        const lname = member.lname.toLowerCase();
+
+        return searchTerms.every(term =>
+            fname.includes(term) ||
+            lname.includes(term)
+
+        );
+    });
 
     return (
         <div className='bg-white'>
