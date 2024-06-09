@@ -4,7 +4,7 @@ import Members from "./components/Members";
 import Layout from "./components/Layout";
 import Trainers from "./components/Trainers";
 import Request from "./components/Request";
-import Login from "./components/login";
+
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -12,7 +12,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <BrowserRouter>
-      {/* <Login /> */}
+
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

@@ -16,12 +16,10 @@ const Members = () => {
     const [memberToDelete, setMemberToDelete] = useState(null);
     const [subscriptionType, setSubscriptionType] = useState('');
 
-
-
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
             .then(response => {
-                let sortedMembers = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                let sortedMembers = response.data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
                 if (subscriptionType) {
                     sortedMembers = sortedMembers.filter(member => member.subscription === subscriptionType);
                 }

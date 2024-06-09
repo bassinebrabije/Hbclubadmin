@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import Request from '../image/Request.jpg';
 
 import { Link } from "react-router-dom";
 
 const Home = () => {
 
-    const [requestCount, setRequestCount] = useState(0);
+    const [inscriptionsCount, setInscriptionsCount] = useState(0);
 
     const [trainerCount, setTrainerCount] = useState(0);
 
     const [membersCount, setMembersCount] = useState(0);
 
     const [members, setMembers] = useState([]);
+
+    const [inscriptions, setInscriptions] = useState([]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/trainers')
@@ -22,13 +24,7 @@ const Home = () => {
             .catch(error => console.error('There was an error Trainer!', error));
     }, []);
 
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/members')
-            .then(response => {
-                setMembersCount(response.data.length);
-            })
-            .catch(error => console.error('There was an error!', error));
-    }, []);
+
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
@@ -42,10 +38,16 @@ const Home = () => {
             .catch(error => console.error('There was an error!', error));
     }, []);
 
+
+
     useEffect(() => {
         axios.get('http://localhost:8000/api/inscriptions')
             .then(response => {
-                setRequestCount(response.data.length);
+                const allinscriptions = response.data;
+                setInscriptionsCount(allinscriptions.length);
+
+                const lastFiveinscriptions = allinscriptions.slice(-5);
+                setInscriptions(lastFiveinscriptions);
             })
             .catch(error => console.error('There was an error!', error));
     }, []);
@@ -92,7 +94,7 @@ const Home = () => {
                     <div className="flex items-center">
                         <div className="flex-shrink-0">
                             <span className="font-normal text-gray-500">Total</span><br />
-                            <span className="text-2xl sm:text-4xl leading-none font-bold text-gray-900">{requestCount}</span>
+                            <span className="text-2xl sm:text-4xl leading-none font-bold text-gray-900">{inscriptionsCount}</span>
                             <h3 className="text-base font-normal text-gray-500">Request</h3>
                         </div>
                         <div className="ml-5 w-0 flex items-center justify-end flex-1 text-red-500 text-base font-bold">
@@ -104,40 +106,81 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="px-4">
-            <div class="bg-white shadow border border-gray-200 rounded-lg mb-4 p-4 sm:p-6 h-full ">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold leading-none text-gray-900">Latest 5 Members</h3>
-                    <Link to='/Members' class="text-sm font-medium text-[#FF0000] hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
-                        View all
-                    </Link>
-                </div>
-                <div class="flow-root ">
-                    <ul class="divide-y divide-gray-200">
-                        {members.map(member => (
-                            <li class="py-3 sm:py-4">
-                                <div class="flex items-center space-x-4">
-                                    <div class="flex-shrink-0">
-                                        <img class="h-8 w-8 rounded-full" src={`http://localhost:8000/images/${member.imagemembers}`} alt={member.imagemembers} />
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium text-gray-900 truncate">
-                                            {member.fname}  {member.lname}
-                                        </p>
-                                        <p class="text-sm text-gray-500 truncate">
-                                            {member.ville}
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-
-                        ))}
-                    </ul>
+            <div className="pt-4">
+                <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
+                    <div className="bg-white shadow border border-gray-200 rounded-lg p-4 sm:p-6 lg:w-[68rem]">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-bold leading-none text-gray-900">Latest 5 Members</h3>
+                            <Link to='/Members' className="text-sm font-medium text-[#FF0000] hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                                View all
+                            </Link>
+                        </div>
+                        <div className="flow-root">
+                            <ul className="divide-y divide-gray-200">
+                                {members.map(member => (
+                                    <li className="py-3 sm:py-4">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="flex-shrink-0">
+                                                <img className="h-10 w-10 rounded-full" src={`http://localhost:8000/images/${member.imagemembers}`} alt={member.imagemembers} />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 truncate">
+                                                    {member.fname.charAt(0).toUpperCase() + member.fname.slice(1)} {member.lname}
+                                                </p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    Email :  {member.email}
+                                                </p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    Phone :  {member.phone}
+                                                </p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    ville :    {member.ville}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="bg-white shadow border border-gray-200 rounded-lg p-4 sm:p-6 lg:h-screnn lg:w-1/2">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-bold leading-none text-gray-900">Latest 5 Request</h3>
+                            <Link to='/Request' className="text-sm font-medium text-[#FF0000] hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                                View all
+                            </Link>
+                        </div>
+                        <div className="flow-root">
+                            <ul className="divide-y divide-gray-200">
+                                {inscriptions.map(inscription => (
+                                    <li className="py-3 sm:py-4">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="flex-shrink-0">
+                                                <img className="h-10 w-10 rounded-full" src={Request} alt="Request" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 truncate">
+                                                    {inscription.full_name.charAt(0).toUpperCase() + inscription.full_name.slice(1)}
+                                                </p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    Email :  {inscription.email}
+                                                </p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    Phone :   {inscription.phone_number}
+                                                </p>
+                                                <p className="text-sm text-gray-500 truncate">
+                                                    ville :   {inscription.ville}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>;
 };
 

@@ -75,6 +75,12 @@ function Addt() {
 
         reader.readAsDataURL(uploadedImage);
     };
+
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        const numericValue = value.replace(/\D/g, '');
+        setPhone(numericValue);
+    };
     return (
         <>
             <div className="fixed bottom-4 right-4 z-50 sm:bottom-8 sm:right-10">
@@ -111,13 +117,23 @@ function Addt() {
                                 </div>
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
+                                        <label htmlFor="ville" className="block mb-2 text-sm font-medium text-gray-900">Ville</label>
+                                        <select
+                                            value={ville} onChange={(e) => setVille(e.target.value)}
+                                            className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+                                            required
+                                        >
+                                            <option value="">Select Ville </option>
+                                            {villes.map((ville) => (
+                                                <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="flex-1">
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Eamil</label>
                                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="Email" required />
                                     </div>
-                                    <div className="flex-1">
-                                        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
-                                        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="123-456-7890" required />
-                                    </div>
+
                                 </div>
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
@@ -132,17 +148,19 @@ function Addt() {
                                         </select>
                                     </div>
                                     <div className="flex-1">
-                                        <label htmlFor="ville" className="block mb-2 text-sm font-medium text-gray-900">Ville</label>
-                                        <select
-                                            value={ville} onChange={(e) => setVille(e.target.value)}
-                                            className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
-                                            required
-                                        >
-                                            <option value="">Select Ville </option>
-                                            {villes.map((ville) => (
-                                                <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
-                                            ))}
-                                        </select>
+                                        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
+                                        <div className="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5">
+                                            <span className="mr-2">+212</span>
+                                            <input
+                                                type="text"
+                                                value={phone}
+                                                onChange={handlePhoneChange}
+                                                className="bg-gray-50 border-0 flex-1 text-gray-900 text-sm rounded-lg p-0 focus:outline-none focus:ring-0"
+                                                placeholder="1234567890"
+                                                pattern="\d*"
+                                                required
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div>

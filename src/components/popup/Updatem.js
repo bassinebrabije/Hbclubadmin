@@ -15,8 +15,6 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
     const [createdAt, setCreatedAt] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
-
-
     useEffect(() => {
         setVilles(villesData);
     }, []);
@@ -41,11 +39,8 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
         }
     }, [memberId]);
 
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
-
 
         const formData = {
             fname: fname,
@@ -55,7 +50,6 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
             ville: ville,
             subscription: subscription,
             sexe: sexe,
-
         };
         axios.put(`http://localhost:8000/api/members/${memberId}`, formData)
             .then(response => {
@@ -71,10 +65,11 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
             });
     };
 
-
-
-
-
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        const numericValue = value.replace(/\D/g, '');
+        setPhone(numericValue);
+    };
 
     return (
         <>
@@ -126,12 +121,22 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                                             <option value="">Select Sexe</option>
                                             <option value="Man">Man</option>
                                             <option value="Women">Women</option>
-
                                         </select>
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
-                                        <input type="text" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="123-456-7890" required />
+                                        <div className="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5">
+                                            <span className="mr-2">+212</span>
+                                            <input
+                                                type="text"
+                                                value={phone}
+                                                onChange={handlePhoneChange}
+                                                className="bg-gray-50 border-0 flex-1 text-gray-900 text-sm rounded-lg p-0 focus:outline-none focus:ring-0"
+                                                placeholder="1234567890"
+                                                pattern="\d*"
+                                                required
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -148,7 +153,6 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                                 <div className="flex space-x-4">
                                     <button type="submit" className="text-white bg-[#008000] w-full font-medium rounded-lg text-sm px-5 py-2.5 text-center">Update</button>
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -168,11 +172,9 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                                 <p className="text-sm font-medium text-[#000] tracking-wides">Member updated successfully! .</p>
                             </div>
                             <div className="items-center px-4 py-3 ">
-
                                 <a href="/Members" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm  ">
                                     OK
                                 </a>
-
                             </div>
                         </div>
                     </div>

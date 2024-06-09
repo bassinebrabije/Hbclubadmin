@@ -18,11 +18,12 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
     const [createdAt, setCreatedAt] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
-
-
     useEffect(() => {
         setVilles(villesData);
     }, []);
+
+
+
 
     useEffect(() => {
         if (trainerId) {
@@ -43,6 +44,7 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
                 .catch(error => console.error('There was an error!', error));
         }
     }, [trainerId]);
+
 
 
 
@@ -76,7 +78,11 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
     };
 
 
-
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        const numericValue = value.replace(/\D/g, '');
+        setPhone(numericValue);
+    };
 
 
 
@@ -110,7 +116,18 @@ function Updatet({ isModalOpen, closeModal, trainerId }) {
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
-                                        <input type="text" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="123-456-7890" required />
+                                        <div className="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5">
+                                            <span className="mr-2">+212</span>
+                                            <input
+                                                type="text"
+                                                value={phone}
+                                                onChange={handlePhoneChange}
+                                                className="bg-gray-50 border-0 flex-1 text-gray-900 text-sm rounded-lg p-0 focus:outline-none focus:ring-0"
+                                                placeholder="1234567890"
+                                                pattern="\d*"
+                                                required
+                                            />
+                                        </div>
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>

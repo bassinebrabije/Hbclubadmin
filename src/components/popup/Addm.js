@@ -22,8 +22,8 @@ function Addm() {
 
     const closeModal = () => {
         setIsModalOpen(false);
-
     };
+
     useEffect(() => {
         setvilles(villesData);
     }, []);
@@ -38,7 +38,9 @@ function Addm() {
         formData.append('ville', ville);
         formData.append('sexe', sexe);
         formData.append('subscription', subscription);
-        formData.append('imagemembers', imagemembers);
+        if (imagemembers) {
+            formData.append('imagemembers', imagemembers);
+        }
 
         axios.post('http://localhost:8000/api/members', formData, {
             headers: {
@@ -76,6 +78,12 @@ function Addm() {
         reader.readAsDataURL(uploadedImage);
     };
 
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        const numericValue = value.replace(/\D/g, '');
+        setPhone(numericValue);
+    };
+
     return (
         <>
             <div className="fixed bottom-4 right-4 z-50 sm:bottom-8 sm:right-10">
@@ -92,8 +100,8 @@ function Addm() {
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" onClick={closeModal}></div>
-                    <div className="relative p-4 w-full sm:max-w-[40rem]  max-h-full bg-white rounded-lg shadow-lg z-50">
-                        <div className="flex items-left  pl-2 pb-2 border-b rounded-t">
+                    <div className="relative p-4 w-full sm:max-w-[40rem] max-h-full bg-white rounded-lg shadow-lg z-50">
+                        <div className="flex items-left pl-2 pb-2 border-b rounded-t">
                             <h3 className="text-xl font-semibold text-gray-900">
                                 Add Member
                             </h3>
@@ -103,11 +111,11 @@ function Addm() {
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="fname" className="block mb-2 text-sm font-medium text-gray-900">First name</label>
-                                        <input type="text" value={fname} onChange={(e) => setFname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="First name" required />
+                                        <input type="text" value={fname} onChange={(e) => setFname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="First name" required />
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="lname" className="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
-                                        <input type="text" value={lastname} onChange={(e) => setLastname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="Last name" required />
+                                        <input type="text" value={lastname} onChange={(e) => setLastname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Last name" required />
                                     </div>
                                 </div>
 
@@ -116,7 +124,7 @@ function Addm() {
                                         <label htmlFor="ville" className="block mb-2 text-sm font-medium text-gray-900">Ville</label>
                                         <select
                                             value={ville} onChange={(e) => setVille(e.target.value)}
-                                            className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                             required
                                         >
                                             <option value="">Select Ville </option>
@@ -127,7 +135,7 @@ function Addm() {
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
-                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="Last name" required />
+                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Email" required />
                                     </div>
                                 </div>
 
@@ -136,26 +144,37 @@ function Addm() {
                                         <label htmlFor="Sexe" className="block mb-2 text-sm font-medium text-gray-900">Gender</label>
                                         <select
                                             value={sexe} onChange={(e) => setSexe(e.target.value)}
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                             required>
                                             <option value="">Select Sexe</option>
                                             <option value="Man">Man</option>
                                             <option value="Women">Women</option>
-
                                         </select>
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">Phone</label>
-                                        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5" placeholder="123-456-7890" required />
+                                        <div className="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5">
+                                            <span className="mr-2">+212</span>
+                                            <input
+                                                type="text"
+                                                value={phone}
+                                                onChange={handlePhoneChange}
+                                                className="bg-gray-50 border-0 flex-1 text-gray-900 text-sm rounded-lg p-0 focus:outline-none focus:ring-0"
+                                                placeholder="1234567890"
+                                                pattern="\d*"
+                                                required
+                                            />
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div>
                                 </div>
-                                <div >
+                                <div>
                                     <label htmlFor="subscription" className="block mb-2 text-sm font-medium text-gray-900">Subscription</label>
                                     <select
                                         value={subscription} onChange={(e) => setSubscription(e.target.value)}
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5"
+                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                         required>
                                         <option value="">Select Subscription</option>
                                         <option value="Monthly">Monthly</option>
@@ -169,14 +188,13 @@ function Addm() {
                                             <div className="w-full flex justify-center">
                                                 <img src={image} alt="Uploaded" className="w-28 rounded-lg" />
                                             </div>
-
                                         ) : (
                                             <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-[5rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                                     <svg className="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                                     </svg>
-                                                    <p className="text-sm text-gray-500 font-semibold">Click to upload</p>
+                                                    <p className="text-sm text-gray-500 font-semibold">Click to upload if you had it</p>
                                                     <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
                                                 </div>
                                                 <input
@@ -189,14 +207,11 @@ function Addm() {
                                                     }}
                                                     accept=".svg, .png, .jpg, .jpeg, .gif"
                                                 />
-
                                             </label>
                                         )}
                                     </div>
-
-
                                 </div>
-                                <button type="submit" className="w-full text-white bg-[#FF0000]  font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
+                                <button type="submit" className="w-full text-white bg-[#FF0000] font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                             </form>
                         </div>
                     </div>
@@ -211,23 +226,21 @@ function Addm() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
-                            <h3 className="text-lg leading-6 font-medium text-gray-900 mt-3">Successfull</h3>
-                            <div className=" px-7 py-3">
+                            <h3 className="text-lg leading-6 font-medium text-gray-900 mt-3">Successful</h3>
+                            <div className="px-7 py-3">
                                 <p className="text-sm font-medium text-[#000] tracking-wides">Member added successfully! .</p>
                             </div>
-                            <div className="items-center px-4 py-3 ">
-
-                                <a href="/Members" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm  ">
+                            <div className="items-center px-4 py-3">
+                                <a href="/Members" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm">
                                     OK
                                 </a>
-
                             </div>
                         </div>
                     </div>
                 </div>
             )}
         </>
-    )
+    );
 }
 
-export default Addm
+export default Addm;
