@@ -38,6 +38,7 @@ function Addm() {
         formData.append('ville', ville);
         formData.append('sexe', sexe);
         formData.append('subscription', subscription);
+
         if (imagemembers) {
             formData.append('imagemembers', imagemembers);
         }
@@ -60,7 +61,7 @@ function Addm() {
             setTimeout(() => {
                 setShowAlert(false);
                 window.location.href = '/Members';
-            }, 8000);
+            }, 2000);
             closeModal();
         }).catch(error => {
             console.error('There was an error!', error);
@@ -105,6 +106,12 @@ function Addm() {
                             <h3 className="text-xl font-semibold text-gray-900">
                                 Add Member
                             </h3>
+                            <button onClick={closeModal} class="text-gray-400 bg-transparent hover:bg-[#FF0000] hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center ">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
                         </div>
                         <div className="p-4">
                             <form onSubmit={handleSubmit} className="space-y-4">

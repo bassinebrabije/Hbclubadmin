@@ -55,8 +55,6 @@ const Home = () => {
 
 
 
-
-
     return <div className="p-4 sm:ml-64">
         <div className="p-4 mt-16">
             <div className=" w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -98,7 +96,7 @@ const Home = () => {
                             <h3 className="text-base font-normal text-gray-500">Request</h3>
                         </div>
                         <div className="ml-5 w-0 flex items-center justify-end flex-1 text-red-500 text-base font-bold">
-                            <Link  >  <svg className="w-10 h-10  text-[#FF0000]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <Link to='/Request'  >  <svg className="w-10 h-10  text-[#FF0000]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17 6h-2V5h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2h-.541A5.965 5.965 0 0 1 14 10v4a1 1 0 1 1-2 0v-4c0-2.206-1.794-4-4-4-.075 0-.148.012-.22.028C7.686 6.022 7.596 6 7.5 6A4.505 4.505 0 0 0 3 10.5V16a1 1 0 0 0 1 1h7v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3h5a1 1 0 0 0 1-1v-6c0-2.206-1.794-4-4-4Zm-9 8.5H7a1 1 0 1 1 0-2h1a1 1 0 1 1 0 2Z" />
                             </svg>
                             </Link>

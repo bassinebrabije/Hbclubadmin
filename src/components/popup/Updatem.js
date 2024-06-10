@@ -57,7 +57,7 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                 setTimeout(() => {
                     setShowAlert(false);
                     window.location.href = '/Members';
-                }, 8000);
+                }, 2000);
                 closeModal();
             })
             .catch(error => {
@@ -81,11 +81,18 @@ function Updatem({ isModalOpen, closeModal, memberId }) {
                             <div className="relative pr-2 pb-2 w-36 rounded-full">
                                 <img className="h-20 w-20 mx-auto" src={`http://localhost:8000/images/${imagemembers}`} alt={imagemembers} />
                             </div>
+
                             <div className="relative pr-2  w-96 rounded-full">
                                 <p className='font-medium'>Full Name : {fname} {lname}</p>
                                 <p className='font-medium'>Joined At : {createdAt}</p>
                                 <p className='font-medium'>Subscription : {subscription}</p>
                             </div>
+                            <button onClick={closeModal} class="text-gray-400 bg-transparent hover:bg-[#FF0000] hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center ">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
                         </div>
                         <div className="p-4">
                             <form className="space-y-4" onSubmit={handleSubmit}>

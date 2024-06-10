@@ -96,14 +96,19 @@ const Members = () => {
                         </div>
                         <div className="mt-4 mb-4 flex items-center">
                             <input
-                                type="text"
-                                id="search"
+                                list="members"
                                 className="border border-gray-200 text-gray-900 text-sm rounded-lg focus:border-[#4991cc] p-2.5 flex-grow"
-                                placeholder="search by Full name"
+                                placeholder="Search by Full Name Members"
                                 value={searchQuery}
                                 onChange={handleSearchChange}
                                 autoComplete="off"
                             />
+                            <datalist id="members">
+                                {members.map((member) => (
+                                    <option key={member.id} >{`${member.fname} ${member.lname}`}</option>
+                                ))}
+                            </datalist>
+
                             <select
                                 className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-40 ml-2 p-2.5"
                                 value={subscriptionType}
@@ -181,7 +186,6 @@ const Members = () => {
                     </div>
                 </div>
             )}
-
             <Updatem isModalOpen={isModalOpen} closeModal={closeModal} memberId={selectedMemberId} />
             <Formaddm />
         </div>

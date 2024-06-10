@@ -1,5 +1,5 @@
 import Home from "./components/Home";
-import Coachs from "./components/Coachs";
+import Coachs from "./components/Coaching";
 import Members from "./components/Members";
 import Layout from "./components/Layout";
 import Trainers from "./components/Trainers";
@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="Coachs" element={<Coachs />} />
+          <Route path="Coaching" element={<Coachs />} />
           <Route path="Members" element={<Members />} />
           <Route path="Trainers" element={<Trainers />} />
           <Route path="Request" element={<Request />} />
