@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Formaddc from './popup/Addc';
 import Updatec from './popup/Updatec';
-
+import PDFC from './pdf/Coachingpdf'
 const AddCoaching = () => {
     const [coachings, setCoachings] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,7 +90,7 @@ const AddCoaching = () => {
                                     <option key={coaching.id} >{`${coaching.trainer.fname} ${coaching.trainer.lastname}`}</option>
                                 ))}
                             </datalist>
-                            <button
+                            <button onClick={PDFC}
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"
                             >
                                 <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
