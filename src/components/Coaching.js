@@ -66,13 +66,18 @@ const AddCoaching = () => {
                 <div className="p-4 mt-16">
                     <div>
                         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <h1 className="text-2xl font-medium">Coaching Table</h1>
                             <div>
                                 <ol className="flex items-center gap-2">
                                     <li>
-                                        <a className="text-2xl font-medium">Dashboard /</a>
+                                        <a href='/'>  <svg class="w-5 h-5 text-[#000] " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
+                                        </svg>
+                                        </a>
                                     </li>
-                                    <li className="text-2xl font-medium text-[#FF0000]"><a>Coachings</a></li>
+                                    <li>
+                                        <p className="text-base font-medium ">/ Dashboard /</p>
+                                    </li>
+                                    <li className="text-base font-medium text-[#FF0000]"><p>Coachings</p></li>
                                 </ol>
                             </div>
                         </div>

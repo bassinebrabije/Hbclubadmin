@@ -12,6 +12,10 @@ const Home = () => {
 
     const [membersCount, setMembersCount] = useState(0);
 
+
+    const [adminsCount, setAdminsCount] = useState(0);
+
+
     const [members, setMembers] = useState([]);
 
     const [inscriptions, setInscriptions] = useState([]);
@@ -24,6 +28,13 @@ const Home = () => {
             .catch(error => console.error('There was an error Trainer!', error));
     }, []);
 
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/trainers')
+            .then(response => {
+                setTrainerCount(response.data.length);
+            })
+            .catch(error => console.error('There was an error Trainer!', error));
+    }, []);
 
 
     useEffect(() => {

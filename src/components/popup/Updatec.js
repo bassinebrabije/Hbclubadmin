@@ -190,7 +190,7 @@ function Updatec({ isModalOpen, closeModal, coachId }) {
                                 <p className="text-sm font-medium text-[#000] tracking-wides">Updated successfully!</p>
                             </div>
                             <div className="items-center px-4 py-3">
-                                <a onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm">
+                                <a href='/Coaching' onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm">
                                     OK
                                 </a>
                             </div>
