@@ -5,8 +5,7 @@ import PDFA from './pdf/Adminspdf';
 const Admins = () => {
     const [admins, setAdmins] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedAdminsId, setSelectedAdminsId] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [adminToDelete, setAdminToDelete] = useState(null);
 
@@ -21,21 +20,11 @@ const Admins = () => {
                 setAdmins(sortedAdmin);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [loggedInAdmin.id]);
 
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
-    };
-
-    const handleMoreClick = (id) => {
-        setSelectedAdminsId(id);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedAdminsId(null);
     };
 
     const handleDeleteClick = (id) => {
@@ -92,14 +81,14 @@ const Admins = () => {
                             <input
                                 list="members"
                                 className="border border-gray-200 text-gray-900 text-sm rounded-lg focus:border-[#4991cc] p-2.5 flex-grow"
-                                placeholder="Search by Full Name Members"
+                                placeholder="Search by Username Admin"
                                 value={searchQuery}
                                 onChange={handleSearchChange}
                                 autoComplete="off"
                             />
                             <datalist id="members">
                                 {admins.map((admin) => (
-                                    <option key={admin.id} >{`${admin.fname} ${admin.lname}`}</option>
+                                    <option key={admin.id} >{`${admin.username} `}</option>
                                 ))}
                             </datalist>
                             <button onClick={PDFA}
@@ -112,7 +101,7 @@ const Admins = () => {
                         </div>
                     </div>
                     <div className="relative overflow-x-auto rounded-lg bg-white">
-                        <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+                        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
                             {filteredTrainers.map(admin => (
                                 <li key={admin.id} className="col-span-1 divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
                                     <div className="flex w-full items-center justify-between space-x-6 p-6">
@@ -121,21 +110,20 @@ const Admins = () => {
                                                 <h3 className="truncate text-base font-bold text-[#000]">{admin.username.charAt(0).toUpperCase() + admin.username.slice(1)}</h3>
                                             </div>
                                             <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Email :</span> {admin.email}</p>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Joined At :  {new Date(admin.created_at).toISOString().split('T')[0]}</p>
+                                            <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Full Name :</span> {admin.fname} {admin.lname}</p>
+                                            <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Phone :</span>  {admin.phone}</p>
+                                            <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Ville : </span> {admin.ville}</p>
+                                            <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Gender :</span>  {admin.sexe}</p>
+                                            <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Joined At :</span>  {new Date(admin.created_at).toISOString().split('T')[0]}</p>
                                         </div>
                                         <img className="h-20 w-20 flex-shrink-0 rounded-full bg-gray-300" src={`http://localhost:8000/images/${admin.imgadmin}`} alt={admin.imgadmin} />
                                     </div>
                                     <div>
                                         <div className="-mt-px flex divide-x divide-gray-200">
                                             <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
-                                                <a onClick={() => handleDeleteClick(admin.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                <button onClick={() => handleDeleteClick(admin.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
                                                     Delete
-                                                </a>
-                                            </div>
-                                            <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
-                                                <a onClick={() => handleMoreClick(admin.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                    More
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

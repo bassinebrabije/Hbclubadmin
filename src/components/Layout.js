@@ -11,6 +11,8 @@ const Layout = () => {
     const [imgAdmin, setImgAdmin] = useState('');
     const [emailAdimn, setEmailAdmin] = useState('');
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
@@ -21,14 +23,20 @@ const Layout = () => {
     const isActive = (path) => {
         return location.pathname === path;
     };
+    const handleLogout = () => {
+        setShowLogoutModal(true);
+    };
 
-    const navigate = useNavigate();
-
-    const handleLogout = async () => {
+    const confirmToLogout = async () => {
         await axios.post('http://localhost:8000/api/logout');
         localStorage.removeItem('admin');
         navigate('/login');
     };
+
+    const cancelLogout = () => {
+        setShowLogoutModal(false);
+    };
+
     useEffect(() => {
         const adminData = JSON.parse(localStorage.getItem('admin'));
         if (adminData) {
@@ -40,6 +48,8 @@ const Layout = () => {
     const closeSidebar = () => {
         setIsOpen(false);
     };
+
+
     return (
         <>
             <div>
@@ -178,7 +188,6 @@ const Layout = () => {
                         <li >
                             <button
                                 onClick={handleLogout}
-
                                 className={`flex items-center p-2 rounded-lg  group ${isActive('/SignOut') ? 'bg-[#FF0000] text-white' : 'hover:text-[#FF0000]'}`
                                 }
                             >
@@ -198,6 +207,28 @@ const Layout = () => {
 
             </aside >
             <Outlet />
+            {showLogoutModal && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="relative p-4 w-full max-w-md max-h-full">
+                        <div className="relative bg-white border border-gray-500 rounded-xl">
+                            <div className="p-4 md:p-5 text-center">
+
+                                <svg className="mx-auto mb-4 text-red-600 w-16 h-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+
+                                <h3 className="mb-5 text-lg font-normal text-gray-700">Are You Sure You Want To Sign Out?</h3>
+                                <button type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" onClick={confirmToLogout}>
+                                    Yes, I'm sure
+                                </button>
+                                <button type="button" className="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:z-10 focus:ring-4 focus:ring-gray-100" onClick={cancelLogout}>
+                                    No, cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     )
 };

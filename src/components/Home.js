@@ -13,8 +13,6 @@ const Home = () => {
     const [membersCount, setMembersCount] = useState(0);
 
 
-    const [adminsCount, setAdminsCount] = useState(0);
-
 
     const [members, setMembers] = useState([]);
 
@@ -42,7 +40,6 @@ const Home = () => {
             .then(response => {
                 const allMembers = response.data;
                 setMembersCount(allMembers.length);
-
                 const lastFiveMembers = allMembers.slice(-5);
                 setMembers(lastFiveMembers);
             })
@@ -56,7 +53,6 @@ const Home = () => {
             .then(response => {
                 const allinscriptions = response.data;
                 setInscriptionsCount(allinscriptions.length);
-
                 const lastFiveinscriptions = allinscriptions.slice(-5);
                 setInscriptions(lastFiveinscriptions);
             })
@@ -117,7 +113,7 @@ const Home = () => {
             </div>
             <div className="pt-4">
                 <div className="flex flex-col lg:flex-row lg:space-x-4 space-y-4 lg:space-y-0">
-                    <div className="bg-white shadow border border-gray-200 rounded-lg p-4 sm:p-6 lg:w-[68rem]">
+                    <div className="bg-white shadow border border-gray-200 rounded-lg p-4 sm:p-6 lg:w-full">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-xl font-bold leading-none text-gray-900">Latest 5 Members</h3>
                             <Link to='/Members' className="text-sm font-medium text-[#FF0000] hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
@@ -152,41 +148,43 @@ const Home = () => {
                             </ul>
                         </div>
                     </div>
-                    <div className="bg-white shadow border border-gray-200 rounded-lg p-4 sm:p-6 lg:h-screnn lg:w-1/2">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-xl font-bold leading-none text-gray-900">Latest 5 Request</h3>
-                            <Link to='/Request' className="text-sm font-medium text-[#FF0000] hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
-                                View all
-                            </Link>
-                        </div>
-                        <div className="flow-root">
-                            <ul className="divide-y divide-gray-200">
-                                {inscriptions.map(inscription => (
-                                    <li className="py-3 sm:py-4">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="flex-shrink-0">
-                                                <img className="h-10 w-10 rounded-full" src={Request} alt="Request" />
+                    {inscriptions.length > 0 && (
+                        <div className="bg-white shadow border border-gray-200 rounded-lg p-4 sm:p-6 lg:h-screnn lg:w-1/2">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-xl font-bold leading-none text-gray-900">Latest 5 Request</h3>
+                                <Link to='/Request' className="text-sm font-medium text-[#FF0000] hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                                    View all
+                                </Link>
+                            </div>
+                            <div className="flow-root">
+                                <ul className="divide-y divide-gray-200">
+                                    {inscriptions.map(inscription => (
+                                        <li className="py-3 sm:py-4">
+                                            <div className="flex items-center space-x-4">
+                                                <div className="flex-shrink-0">
+                                                    <img className="h-10 w-10 rounded-full" src={Request} alt="Request" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                                        {inscription.full_name.charAt(0).toUpperCase() + inscription.full_name.slice(1)}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 truncate">
+                                                        Email :  {inscription.email}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 truncate">
+                                                        Phone :   {inscription.phone_number}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 truncate">
+                                                        ville :   {inscription.ville}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-gray-900 truncate">
-                                                    {inscription.full_name.charAt(0).toUpperCase() + inscription.full_name.slice(1)}
-                                                </p>
-                                                <p className="text-sm text-gray-500 truncate">
-                                                    Email :  {inscription.email}
-                                                </p>
-                                                <p className="text-sm text-gray-500 truncate">
-                                                    Phone :   {inscription.phone_number}
-                                                </p>
-                                                <p className="text-sm text-gray-500 truncate">
-                                                    ville :   {inscription.ville}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

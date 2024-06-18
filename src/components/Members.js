@@ -135,7 +135,7 @@ const Members = () => {
                         </div>
                     </div>
                     <div className="relative overflow-x-auto rounded-lg bg-white">
-                        <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+                        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
                             {filteredMembers.map(member => (
                                 <li key={member.id} className="col-span-1 divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
                                     <div className="flex w-full items-center justify-between space-x-6 p-6">
@@ -154,14 +154,14 @@ const Members = () => {
                                     <div>
                                         <div className="-mt-px flex divide-x divide-gray-200">
                                             <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
-                                                <a onClick={() => handleDeleteClick(member.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                <button onClick={() => handleDeleteClick(member.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
                                                     Delete
-                                                </a>
+                                                </button>
                                             </div>
                                             <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
-                                                <a onClick={() => handleMoreClick(member.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                <button onClick={() => handleMoreClick(member.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
                                                     More
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
