@@ -11,7 +11,6 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
-        console.log('Sending login request with:', { username, password });
         try {
             const response = await axios.post('http://localhost:8000/api/login', {
                 username,
@@ -27,8 +26,6 @@ const Login = () => {
     };
 
     return (
-
-
         <div className="flex w-full flex-wrap">
             <div className="flex w-full flex-col md:w-1/2 lg:w-2/2">
                 <div className="flex justify-center pt-12 md:-mb-24 md:justify-center ">

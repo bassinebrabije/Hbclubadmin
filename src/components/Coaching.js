@@ -10,15 +10,18 @@ const AddCoaching = () => {
     const [selectedCoachingId, setSelectedCoachingId] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [coachingToDelete, setCoachingToDelete] = useState(null);
-
+    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
     useEffect(() => {
         axios.get('http://localhost:8000/api/coaching')
             .then(response => {
-                const sortedcoaching = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                setCoachings(sortedcoaching);
+                let sortedCoachings = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                if (loggedInAdmin.username !== 'admin') {
+                    sortedCoachings = sortedCoachings.filter(coaching => coaching.trainer.ville === loggedInAdmin.ville && coaching.member.ville === loggedInAdmin.ville);
+                }
+                setCoachings(sortedCoachings);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
@@ -118,7 +121,7 @@ const AddCoaching = () => {
                                             </div>
                                             <p className="mt-1 truncate text-sm text-gray-500">Start At :  {new Date(coaching.created_at).toISOString().split('T')[0]}</p>
                                         </div>
-                                        <img className="h-20 w-20 flex-shrink-0  rounded-full bg-gray-300" src={`http://localhost:8000/images/${coaching.member.imagemembers}`} alt={coaching.member.imagemembers} />
+                                        <img className="h-20 w-20 flex-shrink-0  rounded-full bg-gray-300" src={`http://localhost:8000/images/${coaching.trainer.img}`} alt={coaching.trainer.img} />
                                     </div>
                                     <div className="-mt-px flex divide-x divide-gray-200">
                                         <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
@@ -143,10 +146,10 @@ const AddCoaching = () => {
                     <div className="relative p-4 w-full max-w-md max-h-full">
                         <div className="relative bg-white border border-gray-500 rounded-xl">
                             <div className="p-4 md:p-5 text-center">
-                                <svg className="mx-auto mb-4 text-red-600 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                <svg className="mx-auto mb-4 text-red-600 w-16 h-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
-                                <h3 className="mb-5 text-lg font-normal text-gray-700">Are you sure you want to delete this ?</h3>
+                                <h3 className="mb-5 text-base font-normal text-gray-700">Are You Sure You Want To Delete This ?</h3>
                                 <button type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" onClick={confirmDelete}>
                                     Yes, I'm sure
                                 </button>

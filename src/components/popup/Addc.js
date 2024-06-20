@@ -11,21 +11,31 @@ function Addc() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
+    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
+
     useEffect(() => {
         axios.get('http://localhost:8000/api/trainers')
             .then(response => {
-                setTrainers(response.data);
+                let trainersData = response.data;
+                if (loggedInAdmin.username !== 'admin') {
+                    trainersData = trainersData.filter(trainer => trainer.ville === loggedInAdmin.ville);
+                }
+                setTrainers(trainersData);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
             .then(response => {
-                setMembers(response.data);
+                let membersData = response.data;
+                if (loggedInAdmin.username !== 'admin') {
+                    membersData = membersData.filter(member => member.ville === loggedInAdmin.ville);
+                }
+                setMembers(membersData);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
     const openModal = () => {
         setIsModalOpen(true);

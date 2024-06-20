@@ -7,57 +7,53 @@ import { Link } from "react-router-dom";
 const Home = () => {
 
     const [inscriptionsCount, setInscriptionsCount] = useState(0);
-
     const [trainerCount, setTrainerCount] = useState(0);
-
     const [membersCount, setMembersCount] = useState(0);
-
-
-
     const [members, setMembers] = useState([]);
-
     const [inscriptions, setInscriptions] = useState([]);
 
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/trainers')
-            .then(response => {
-                setTrainerCount(response.data.length);
-            })
-            .catch(error => console.error('There was an error Trainer!', error));
-    }, []);
+    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/trainers')
             .then(response => {
-                setTrainerCount(response.data.length);
+                let alltrainer = response.data;
+                if (loggedInAdmin.username !== 'admin') {
+                    alltrainer = alltrainer.filter(trainer => trainer.ville === loggedInAdmin.ville);
+                }
+                setTrainerCount(alltrainer.length);
             })
             .catch(error => console.error('There was an error Trainer!', error));
     }, []);
-
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
             .then(response => {
-                const allMembers = response.data;
+                let allMembers = response.data;
+                if (loggedInAdmin.username !== 'admin') {
+                    allMembers = allMembers.filter(member => member.ville === loggedInAdmin.ville);
+                }
                 setMembersCount(allMembers.length);
                 const lastFiveMembers = allMembers.slice(-5);
                 setMembers(lastFiveMembers);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
-
-
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/inscriptions')
             .then(response => {
-                const allinscriptions = response.data;
-                setInscriptionsCount(allinscriptions.length);
-                const lastFiveinscriptions = allinscriptions.slice(-5);
-                setInscriptions(lastFiveinscriptions);
+                let allInscriptions = response.data;
+                if (loggedInAdmin.username !== 'admin') {
+                    allInscriptions = allInscriptions.filter(inscription => inscription.ville === loggedInAdmin.ville);
+                }
+                setInscriptionsCount(allInscriptions.length);
+                const lastFiveInscriptions = allInscriptions.slice(-5);
+                setInscriptions(lastFiveInscriptions);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
+
 
 
 

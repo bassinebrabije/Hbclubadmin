@@ -3,11 +3,9 @@ import axios from 'axios';
 
 import Formaddm from './popup/Addm';
 import Updatem from './popup/Updatem';
-
 import PDFM from './pdf/Memberspdf';
 
 const Members = () => {
-
     const [members, setMembers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedMemberId, setSelectedMemberId] = useState(null);
@@ -16,6 +14,8 @@ const Members = () => {
     const [memberToDelete, setMemberToDelete] = useState(null);
     const [subscriptionType, setSubscriptionType] = useState('');
 
+    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
+
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
             .then(response => {
@@ -23,10 +23,13 @@ const Members = () => {
                 if (subscriptionType) {
                     sortedMembers = sortedMembers.filter(member => member.subscription === subscriptionType);
                 }
+                if (loggedInAdmin.username !== 'admin') {
+                    sortedMembers = sortedMembers.filter(member => member.ville === loggedInAdmin.ville);
+                }
                 setMembers(sortedMembers);
             })
             .catch(error => console.error('There was an error!', error));
-    }, [subscriptionType]);
+    }, [subscriptionType, loggedInAdmin.ville, loggedInAdmin.username]);
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
@@ -74,7 +77,6 @@ const Members = () => {
         return searchTerms.every(term =>
             fname.includes(term) ||
             lname.includes(term)
-
         );
     });
 
@@ -87,8 +89,8 @@ const Members = () => {
                             <div>
                                 <ol className="flex items-center gap-2">
                                     <li>
-                                        <a href='/'>  <svg class="w-5 h-5 text-[#000] " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
+                                        <a href='/'>  <svg className="w-5 h-5 text-[#000] " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
                                         </svg>
                                         </a>
                                     </li>
@@ -176,10 +178,10 @@ const Members = () => {
                     <div className="relative p-4 w-full max-w-md max-h-full">
                         <div className="relative bg-white border border-gray-500 rounded-xl">
                             <div className="p-4 md:p-5 text-center">
-                                <svg className="mx-auto mb-4 text-red-600 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                <svg className="mx-auto mb-4 text-red-600 w-16 h-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
-                                <h3 className="mb-5 text-lg font-normal text-gray-700">Are you sure you want to delete this member?</h3>
+                                <h3 className="mb-5 text-base font-normal text-gray-700">Are You Sure You Want To Delete This Member ?</h3>
                                 <button type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2" onClick={confirmDelete}>
                                     Yes, I'm sure
                                 </button>

@@ -2,18 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Request() {
-    const [requests, setrequests] = useState([]);
+    const [requests, setRequests] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [requestToDelete, setRequestToDelete] = useState(null);
+    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/inscriptions')
             .then(response => {
-                const sortedrequests = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                setrequests(sortedrequests);
+                let sortedRequests = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                if (loggedInAdmin.username !== 'admin') {
+                    sortedRequests = sortedRequests.filter(request => request.ville === loggedInAdmin.ville);
+                }
+                setRequests(sortedRequests);
             })
             .catch(error => console.error('There was an error!', error));
-    }, []);
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
     const handleDeleteClick = (id) => {
         setRequestToDelete(id);
@@ -23,7 +27,7 @@ function Request() {
     const confirmDelete = () => {
         axios.delete(`http://localhost:8000/api/inscriptions/${requestToDelete}`)
             .then(() => {
-                setrequests(requests.filter(request => request.id !== requestToDelete));
+                setRequests(requests.filter(request => request.id !== requestToDelete));
                 setShowDeleteModal(false);
                 setRequestToDelete(null);
             })
