@@ -1,13 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/Home";
-import Coachs from "./components/Coaching";
-import Members from "./components/Members";
+import Coachspage from "./components/Coaching";
+import Memberspage from "./components/Members";
 import Layout from "./components/Layout";
-import Trainers from "./components/Trainers";
-import Request from "./components/Request";
+import Trainerspage from "./components/Trainers";
+import Requestpage from "./components/Request";
 import Loginpage from './components/Login';
 import Registerpage from './components/admins';
+
+
 import Notfoundpage from './components/Notfound';
 
 
@@ -30,13 +32,13 @@ function App() {
       <Routes>
         <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route index element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="Coaching" element={<ProtectedRoute><Coachs /></ProtectedRoute>} />
-          <Route path="Members" element={<ProtectedRoute><Members /></ProtectedRoute>} />
-          <Route path="Trainers" element={<ProtectedRoute><Trainers /></ProtectedRoute>} />
+          <Route path="Coaching" element={<ProtectedRoute><Coachspage /></ProtectedRoute>} />
+          <Route path="Members" element={<ProtectedRoute><Memberspage /></ProtectedRoute>} />
+          <Route path="Trainers" element={<ProtectedRoute><Trainerspage /></ProtectedRoute>} />
           {loggedInAdmin && loggedInAdmin.username.includes('admin') && (
             <Route path="Register" element={<ProtectedRoute><Registerpage /></ProtectedRoute>} />
           )}
-          <Route path="Request" element={<ProtectedRoute><Request /></ProtectedRoute>} />
+          <Route path="Request" element={<ProtectedRoute><Requestpage /></ProtectedRoute>} />
         </Route>
         <Route path="login" element={<RedirectIfAuthenticated><Loginpage /></RedirectIfAuthenticated>} />
         <Route path="*" element={<Notfoundpage />} />

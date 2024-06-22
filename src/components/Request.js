@@ -61,9 +61,9 @@ function Request() {
                             </div>
                         </div>
                         <div className="relative overflow-x-auto rounded-lg bg-white">
-                            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+                            <ul className="grid  grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
                                 {requests.map(request => (
-                                    <li key={request.id} className="col-span-1 divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
+                                    <li key={request.id} className="col-span-1 cursor-pointer divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
                                         <div className="flex w-full items-center justify-between space-x-6 p-6">
                                             <div className="flex-1 truncate">
                                                 <div className="flex items-center space-x-3">

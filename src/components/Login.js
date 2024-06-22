@@ -27,7 +27,7 @@ const Login = () => {
 
     return (
         <div className="flex w-full flex-wrap">
-            <div className="flex w-full flex-col md:w-1/2 lg:w-2/2">
+            <div className="flex w-full flex-col md:w-1/2 lg:w-1/2">
                 <div className="flex justify-center pt-12 md:-mb-24 md:justify-center ">
                     <img src={Logo} className="w-20 " alt="logo" />
                 </div>
@@ -64,7 +64,7 @@ const Login = () => {
 
                 </div>
             </div>
-            <div className="pointer-events-none hidden select-none bg-black shadow-2xl md:block md:w-1/2 lg:w-1/2">
+            <div className="pointer-events-none hidden select-none bg-black shadow-2xl md:block md:w-1/2 lg:w-2/2">
                 <img className="h-screen w-full object-cover opacity-90" src={Loginimg} alt='loginimg' />
             </div>
         </div>
