@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import villesData from './popup/Villes.json'
 import Formaddm from './popup/Addm';
 import Updatem from './popup/Updatem';
 import PDFM from './pdf/Memberspdf';
-
+import Error from '../image/Oops.png'
 const Members = () => {
     const [members, setMembers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -12,6 +12,8 @@ const Members = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [memberToDelete, setMemberToDelete] = useState(null);
+    const [villes, setvilles] = useState([]);
+    const [filterville, setFltertville] = useState('');
     const [subscriptionType, setSubscriptionType] = useState('');
 
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
@@ -23,13 +25,23 @@ const Members = () => {
                 if (subscriptionType) {
                     sortedMembers = sortedMembers.filter(member => member.subscription === subscriptionType);
                 }
+                if (filterville) {
+                    sortedMembers = sortedMembers.filter(member => member.ville === filterville);
+                }
                 if (loggedInAdmin.username !== 'admin') {
                     sortedMembers = sortedMembers.filter(member => member.ville === loggedInAdmin.ville);
                 }
                 setMembers(sortedMembers);
             })
             .catch(error => console.error('There was an error!', error));
-    }, [subscriptionType, loggedInAdmin.ville, loggedInAdmin.username]);
+    }, [subscriptionType, filterville, loggedInAdmin.ville, loggedInAdmin.username]);
+
+
+
+    useEffect(() => {
+        setvilles(villesData);
+    }, []);
+
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
@@ -37,8 +49,11 @@ const Members = () => {
 
     const handleSubscriptionChange = (e) => {
         setSubscriptionType(e.target.value);
-    };
 
+    };
+    const handleFltertvilleChange = (e) => {
+        setFltertville(e.target.value);
+    };
     const handleMoreClick = (id) => {
         setSelectedMemberId(id);
         setIsModalOpen(true);
@@ -126,6 +141,16 @@ const Members = () => {
                                 <option value="Quarterly">Quarterly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
+                            <select
+                                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-20 sm:w-40 ml-2 p-2.5"
+                                value={filterville}
+                                onChange={handleFltertvilleChange}
+                                required>
+                                <option value="">All Ville</option>
+                                {villes.map((ville) => (
+                                    <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                ))}
+                            </select>
                             <button onClick={PDFM}
 
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"
@@ -137,39 +162,49 @@ const Members = () => {
                         </div>
                     </div>
                     <div className="relative overflow-x-auto rounded-lg bg-white">
-                        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
-                            {filteredMembers.map(member => (
-                                <li key={member.id} className="col-span-1 cursor-pointer  divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
-                                    <div className="flex w-full items-center justify-between space-x-6 p-6">
-                                        <div className="flex-1 truncate">
-                                            <div className="flex items-center space-x-3">
-                                                <h3 className="truncate text-base font-bold text-[#000]">{member.fname.charAt(0).toUpperCase() + member.fname.slice(1)} {member.lname}</h3>
-                                            </div>
-                                            <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Subscription :</span> {member.subscription}</p>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Joined At :  {new Date(member.created_at).toISOString().split('T')[0]}</p>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Update At :  {new Date(member.updated_at).toISOString().split('T')[0]}</p>
 
-                                            <p className="mt-1 truncate text-sm text-gray-500">Phone Number : {member.phone}</p>
-                                        </div>
-                                        <img className="h-20 w-20 flex-shrink-0 rounded-full bg-gray-300" src={`http://localhost:8000/images/${member.imagemembers}`} alt={member.imagemembers} />
+                        {filteredMembers.length === 0 ? (
+                            <div className=" flex items-center">
+                                <div className="container flex flex-col md:flex-row items-center justify-center text-gray-700">
+                                    <div className="max-w-lg">
+                                        <img src={Error} alt="Error" className="" />
                                     </div>
-                                    <div>
-                                        <div className="-mt-px flex divide-x divide-gray-200">
-                                            <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
-                                                <button onClick={() => handleDeleteClick(member.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                    Delete
-                                                </button>
+                                </div>
+                            </div >
+                        ) : (
+                            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+                                {filteredMembers.map(member => (
+                                    <li key={member.id} className="col-span-1 cursor-pointer  divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
+                                        <div className="flex w-full items-center justify-between space-x-6 p-6">
+                                            <div className="flex-1 truncate">
+                                                <div className="flex items-center space-x-3">
+                                                    <h3 className="truncate text-base font-bold text-[#000]">{member.fname.charAt(0).toUpperCase() + member.fname.slice(1)} {member.lname}</h3>
+                                                </div>
+                                                <p className="mt-1 truncate text-sm text-gray-500"><span className="text-[#000] font-medium">Subscription :</span> {member.subscription}</p>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Joined At :  {new Date(member.created_at).toISOString().split('T')[0]}</p>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Update At :  {new Date(member.updated_at).toISOString().split('T')[0]}</p>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Phone Number : {member.phone}</p>
                                             </div>
-                                            <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
-                                                <button onClick={() => handleMoreClick(member.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                    More
-                                                </button>
+                                            <img className="h-20 w-20 flex-shrink-0 rounded-full  bg-gray-300" src={`http://localhost:8000/images/${member.imagemembers}`} alt={member.imagemembers} />
+                                        </div>
+                                        <div>
+                                            <div className="-mt-px flex divide-x divide-gray-200">
+                                                <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
+                                                    <button onClick={() => handleDeleteClick(member.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                                <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
+                                                    <button onClick={() => handleMoreClick(member.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                        More
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
             </div>

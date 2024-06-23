@@ -5,7 +5,7 @@ import villesData from './Villes.json';
 function Adda() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fname, setFname] = useState('');
-    const [lname, setLanme] = useState('');
+    const [lname, setLname] = useState('');
     const [phone, setPhone] = useState('');
     const [ville, setVille] = useState('');
     const [sexe, setSexe] = useState('');
@@ -15,7 +15,19 @@ function Adda() {
     const [imgadmin, setImgadmin] = useState(null);
     const [image, setImage] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
-    const [villes, setvilles] = useState([]);
+    const [villes, setVilles] = useState([]);
+
+
+
+    const generatePassword = (length = 12) => {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+        let newPassword = '';
+        for (let i = 0; i < length; i++) {
+            newPassword += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return newPassword;
+    };
+
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -26,9 +38,13 @@ function Adda() {
     };
 
     useEffect(() => {
-        setvilles(villesData);
+        setVilles(villesData);
     }, []);
 
+    useEffect(() => {
+        const newPassword = generatePassword();
+        setPassword(newPassword);
+    }, []);
     const handleRegister = async (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -37,20 +53,22 @@ function Adda() {
         formData.append('phone', phone);
         formData.append('ville', ville);
         formData.append('sexe', sexe);
-        formData.append('username', username);
+        formData.append('username', `${lname}${fname}`);
         formData.append('email', email);
         formData.append('password', password);
         formData.append('password_confirmation', password);
         if (imgadmin) {
             formData.append('imgadmin', imgadmin);
         }
-        axios.post('http://localhost:8000/api/register', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(response => {
+
+        try {
+            await axios.post('http://localhost:8000/api/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             setFname('');
-            setLanme('');
+            setLname('');
             setPhone('');
             setVille('');
             setSexe('');
@@ -58,16 +76,36 @@ function Adda() {
             setEmail('');
             setPassword('');
             setImgadmin(null);
+            setImage(null);
             setShowAlert(true);
             setTimeout(() => {
                 setShowAlert(false);
-                window.location.href = '/Register';
-            }, 2000);
-            closeModal();
-        }).catch(error => {
+                /*window.location.href = '/Register';*/
+            }, 100000);
+
+            // Logging values before sending the email
+            console.log('Sending admin email with the following details:');
+            console.log('Email:', email);
+            console.log('First Name:', fname);
+            console.log('Last Name:', lname);
+            console.log('Username:', `${lname}${fname}`);
+            console.log('Password:', password);
+
+            await axios.post('http://localhost:8000/api/send-admin-email', {
+                email,
+                fname,
+                lname,
+                username: `${lname}${fname}`,
+                password,
+            });
+
+            /*closeModal();*/
+        } catch (error) {
             console.error('There was an error!', error);
-        });
+        }
     };
+
+
 
     const handleImageUpload = (e) => {
         const uploadedImage = e.target.files[0];
@@ -106,11 +144,11 @@ function Adda() {
                             <h3 className="text-xl font-semibold text-gray-900">
                                 Add Admin
                             </h3>
-                            <button onClick={closeModal} class="text-gray-400 bg-transparent hover:bg-[#FF0000] hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center ">
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <button onClick={closeModal} className="text-gray-400 bg-transparent hover:bg-[#FF0000] hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
-                                <span class="sr-only">Close modal</span>
+                                <span className="sr-only">Close modal</span>
                             </button>
                         </div>
                         <div className="p-4">
@@ -118,34 +156,36 @@ function Adda() {
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="fname" className="block mb-2 text-sm font-medium text-gray-900">First name</label>
-                                        <input type="text" value={fname} onChange={(e) => setFname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="User Name" required />
+                                        <input type="text" id="fname" value={fname} onChange={(e) => setFname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="First Name" required />
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="lname" className="block mb-2 text-sm font-medium text-gray-900">Last Name</label>
-                                        <input type="text" value={lname} onChange={(e) => setLanme(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="User Name" required />
+                                        <input type="text" id="lname" value={lname} onChange={(e) => setLname(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Last Name" required />
                                     </div>
                                 </div>
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Username</label>
-                                        <input type="text" value={lname + fname} onChange={(e) => setUsername(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="User Name" required />
+                                        <input type="text" id="username" value={`${lname}${fname}`} onChange={(e) => setUsername(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Username" required />
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>
-                                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Email" required />
+                                        <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Email" required />
                                     </div>
                                 </div>
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="ville" className="block mb-2 text-sm font-medium text-gray-900">Ville</label>
                                         <select
-                                            value={ville} onChange={(e) => setVille(e.target.value)}
+                                            id="ville"
+                                            value={ville}
+                                            onChange={(e) => setVille(e.target.value)}
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                             required
                                         >
-                                            <option value="">Select Ville </option>
+                                            <option value="">Select Ville</option>
                                             {villes.map((ville) => (
-                                                <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                                <option key={ville.id} value={ville.ville} className='text-[#000]'>{ville.ville}</option>
                                             ))}
                                         </select>
                                     </div>
@@ -155,6 +195,7 @@ function Adda() {
                                             <span className="mr-2">+212</span>
                                             <input
                                                 type="text"
+                                                id="phone"
                                                 value={phone}
                                                 onChange={handlePhoneChange}
                                                 className="bg-gray-50 border-0 flex-1 text-gray-900 text-sm rounded-lg p-0 focus:outline-none focus:ring-0"
@@ -167,52 +208,57 @@ function Adda() {
                                 </div>
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
-                                        <label htmlFor="Sexe" className="block mb-2 text-sm font-medium text-gray-900">Gender</label>
+                                        <label htmlFor="sexe" className="block mb-2 text-sm font-medium text-gray-900">Gender</label>
                                         <select
-                                            value={sexe} onChange={(e) => setSexe(e.target.value)}
+                                            id="sexe"
+                                            value={sexe}
+                                            onChange={(e) => setSexe(e.target.value)}
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-                                            required>
-                                            <option value="">Select Sexe</option>
+                                            required
+                                        >
+                                            <option value="">Select Gender</option>
                                             <option value="Man">Man</option>
-                                            <option value="Women">Women</option>
+                                            <option value="Woman">Woman</option>
                                         </select>
                                     </div>
                                     <div className="flex-1">
-                                        <label htmlFor="Password" className="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                                        <input type="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="*********" required />
+                                        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Password it's Auto Generate</label>
+                                        <input
+                                            type="password"
+                                            id="password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                            placeholder="*********"
+                                            required />
                                     </div>
                                 </div>
-                                <div>
-                                </div>
-
-                                <div>
-                                    <div className="flex items-center justify-center w-full">
-                                        {image ? (
-                                            <div className="w-full flex justify-center">
-                                                <img src={image} alt="Uploaded" className="w-28 rounded-lg" />
+                                <div className="flex items-center justify-center w-full">
+                                    {image ? (
+                                        <div className="w-full flex justify-center">
+                                            <img src={image} alt="Uploaded" className="w-28 rounded-lg" />
+                                        </div>
+                                    ) : (
+                                        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-[5rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg className="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                </svg>
+                                                <p className="text-sm text-gray-500 font-semibold">Click to upload if you had it</p>
+                                                <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
                                             </div>
-                                        ) : (
-                                            <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-[5rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                    <svg className="w-5 h-5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                    </svg>
-                                                    <p className="text-sm text-gray-500 font-semibold">Click to upload if you had it</p>
-                                                    <p className="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
-                                                </div>
-                                                <input
-                                                    id="dropzone-file"
-                                                    type="file"
-                                                    className="hidden"
-                                                    onChange={(e) => {
-                                                        handleImageUpload(e);
-                                                        setImgadmin(e.target.files[0]);
-                                                    }}
-                                                    accept=".svg, .png, .jpg, .jpeg, .gif"
-                                                />
-                                            </label>
-                                        )}
-                                    </div>
+                                            <input
+                                                id="dropzone-file"
+                                                type="file"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    handleImageUpload(e);
+                                                    setImgadmin(e.target.files[0]);
+                                                }}
+                                                accept=".svg, .png, .jpg, .jpeg, .gif"
+                                            />
+                                        </label>
+                                    )}
                                 </div>
                                 <button type="submit" className="w-full text-white bg-[#FF0000] font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
                             </form>
@@ -224,14 +270,14 @@ function Adda() {
                 <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-50 backdrop-blur-sm">
                     <div className="bg-white rounded-lg">
                         <div className="mt-3 text-center">
-                            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-white border border-[#FF0000] ">
-                                <svg className="h-6 w-6 " fill="none" stroke="#FF0000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-white border border-[#FF0000]">
+                                <svg className="h-6 w-6" fill="none" stroke="#FF0000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
                             <h3 className="text-lg leading-6 font-medium text-gray-900 mt-3">Successful</h3>
                             <div className="px-7 py-3">
-                                <p className="text-sm font-medium text-[#000] tracking-wides">Admin added successfully! .</p>
+                                <p className="text-sm font-medium text-[#000] tracking-wides">Admin added successfully!</p>
                             </div>
                             <div className="items-center px-4 py-3">
                                 <a href="/Register" onClick={() => setShowAlert(false)} className="px-4 py-2 bg-[#FF0000] text-white text-base font-medium rounded-md w-96 shadow-sm">

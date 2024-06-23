@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-const downloadTrainersPDF = () => {
+const downloadRequestPDF = () => {
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
 
     let url;
     if (loggedInAdmin.username === 'admin') {
-        url = `http://localhost:8000/api/download-trainers-pdf`;
+        url = `http://localhost:8000/api/download-inscription-pdf`;
     } else {
         const ville = loggedInAdmin.ville;
-        url = `http://localhost:8000/api/download-trainers-pdf?ville=${ville}`;
+        url = `http://localhost:8000/api/download-inscription-pdf?ville=${ville}`;
     }
     axios({
         url: url,
@@ -19,7 +19,7 @@ const downloadTrainersPDF = () => {
         const downloadUrl = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.setAttribute('download', 'trainers.pdf');
+        link.setAttribute('download', 'inscriptions.pdf');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -29,6 +29,4 @@ const downloadTrainersPDF = () => {
     });
 };
 
-
-export default downloadTrainersPDF;
-
+export default downloadRequestPDF;

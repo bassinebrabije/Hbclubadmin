@@ -3,6 +3,7 @@ import axios from 'axios';
 import Formaddc from './popup/Addc';
 import Updatec from './popup/Updatec';
 import PDFC from './pdf/Coachingpdf'
+import Error from '../image/Oops.png'
 const AddCoaching = () => {
     const [coachings, setCoachings] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,8 +24,8 @@ const AddCoaching = () => {
             .catch(error => console.error('There was an error!', error));
     }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
     };
 
     const handleMoreClick = (id) => {
@@ -108,36 +109,46 @@ const AddCoaching = () => {
                         </div>
                     </div>
                     <div className="relative overflow-x-auto rounded-lg bg-white">
-                        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
-                            {filteredCoachings.map((coaching) => (
-                                <li key={coaching.id} className="col-span-1 cursor-pointer divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
-                                    <div className="flex w-full items-center justify-between space-x-6 p-6">
-                                        <div className="flex-1 truncate">
-                                            <div className="flex items-center space-x-3">
-                                                <h3 className="truncate text-sm font-bold text-[#000]">Member : {coaching.member.fname.charAt(0).toUpperCase() + coaching.member.fname.slice(1)} {coaching.member.lname}</h3>
-                                            </div>
-                                            <div className="flex items-center space-x-3">
-                                                <h3 className="truncate text-sm font-bold text-[#000]">Trainer : {coaching.trainer.fname.charAt(0).toUpperCase() + coaching.trainer.fname.slice(1)} {coaching.trainer.lastname}</h3>
-                                            </div>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Start At :  {new Date(coaching.created_at).toISOString().split('T')[0]}</p>
-                                        </div>
-                                        <img className="h-20 w-20 flex-shrink-0  rounded-full bg-gray-300" src={`http://localhost:8000/images/${coaching.trainer.img}`} alt={coaching.trainer.img} />
+                        {filteredCoachings.length === 0 ? (
+                            <div className=" flex items-center">
+                                <div className="container flex flex-col md:flex-row items-center justify-center text-gray-700">
+                                    <div className="max-w-lg">
+                                        <img src={Error} alt="Error" className="" />
                                     </div>
-                                    <div className="-mt-px flex divide-x divide-gray-200">
-                                        <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
-                                            <button onClick={() => handleDeleteClick(coaching.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                Delete
-                                            </button>
+                                </div>
+                            </div >
+                        ) : (
+                            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+                                {filteredCoachings.map((coaching) => (
+                                    <li key={coaching.id} className="col-span-1 cursor-pointer divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
+                                        <div className="flex w-full items-center justify-between space-x-6 p-6">
+                                            <div className="flex-1 truncate">
+                                                <div className="flex items-center space-x-3">
+                                                    <h3 className="truncate text-sm font-bold text-[#000]">Member : {coaching.member.fname.charAt(0).toUpperCase() + coaching.member.fname.slice(1)} {coaching.member.lname}</h3>
+                                                </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <h3 className="truncate text-sm font-bold text-[#000]">Trainer : {coaching.trainer.fname.charAt(0).toUpperCase() + coaching.trainer.fname.slice(1)} {coaching.trainer.lastname}</h3>
+                                                </div>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Start At :  {new Date(coaching.created_at).toISOString().split('T')[0]}</p>
+                                            </div>
+                                            <img className="h-20 w-20 flex-shrink-0  rounded-full bg-gray-300" src={`http://localhost:8000/images/${coaching.trainer.img}`} alt={coaching.trainer.img} />
                                         </div>
-                                        <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
-                                            <button onClick={() => handleMoreClick(coaching.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                More
-                                            </button>
+                                        <div className="-mt-px flex divide-x divide-gray-200">
+                                            <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
+                                                <button onClick={() => handleDeleteClick(coaching.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                            <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
+                                                <button onClick={() => handleMoreClick(coaching.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                    More
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
             </div>

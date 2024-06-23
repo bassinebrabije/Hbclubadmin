@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Formaddt from './popup/Addt'
 import Updatet from './popup/Updatet'
-
+import villesData from './popup/Villes.json'
 import PDFT from './pdf/Trainerspdf';
+import Error from '../image/Oops.png'
 
 const Trainers = () => {
 
@@ -13,6 +14,8 @@ const Trainers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [trainerToDelete, setTrainerToDelete] = useState(null);
+    const [villes, setvilles] = useState([]);
+    const [filterville, setFltertville] = useState('');
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
 
 
@@ -20,18 +23,29 @@ const Trainers = () => {
         axios.get('http://localhost:8000/api/trainers')
             .then(response => {
                 let sortedTrainers = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                if (filterville) {
+                    sortedTrainers = sortedTrainers.filter(trainer => trainer.ville === filterville);
+                }
                 if (loggedInAdmin.username !== 'admin') {
                     sortedTrainers = sortedTrainers.filter(trainer => trainer.ville === loggedInAdmin.ville);
                 }
                 setTrainers(sortedTrainers);
             })
             .catch(error => console.error('There was an error!', error));
-    }, [loggedInAdmin.ville, loggedInAdmin.username]);
+    }, [filterville, , loggedInAdmin.ville, loggedInAdmin.username]);
 
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
+
+    useEffect(() => {
+        setvilles(villesData);
+    }, []);
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
     };
 
+    const handleFltertvilleChange = (e) => {
+        setFltertville(e.target.value);
+    };
     const handleMoreClick = (id) => {
         setSelectedTrainerId(id);
         setIsModalOpen(true);
@@ -116,6 +130,16 @@ const Trainers = () => {
                                     <option key={trainer.id} >{`${trainer.fname} ${trainer.lastname}`}</option>
                                 ))}
                             </datalist>
+                            <select
+                                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-20 sm:w-40 ml-2 p-2.5"
+                                value={filterville}
+                                onChange={handleFltertvilleChange}
+                                required>
+                                <option value="">All Ville</option>
+                                {villes.map((ville) => (
+                                    <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                ))}
+                            </select>
                             <button
                                 onClick={PDFT}
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"
@@ -127,37 +151,47 @@ const Trainers = () => {
                         </div>
                     </div>
                     <div className="relative overflow-x-auto rounded-lg bg-white">
-                        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
-                            {filteredTrainers.map(trainer => (
-                                <li key={trainer.id} className="col-span-1 cursor-pointer divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
-                                    <div className="flex w-full items-center justify-between space-x-6 p-6">
-                                        <div className="flex-1 truncate">
-                                            <div className="flex items-center space-x-3">
-                                                <h3 className="truncate text-base font-bold text-[#000]">{trainer.fname.charAt(0).toUpperCase() + trainer.fname.slice(1)} {trainer.lastname}</h3>
-                                            </div>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Phone Number : {trainer.phone}</p>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Ville : {trainer.ville}</p>
-                                            <p className="mt-1 truncate text-sm text-gray-500">Joined At :  {new Date(trainer.created_at).toISOString().split('T')[0]}</p>
-                                        </div>
-                                        <img className="h-20 w-20 flex-shrink-0 rounded-full bg-gray-300" src={`http://localhost:8000/images/${trainer.img}`} alt={trainer.img} />
+                        {filteredTrainers.length === 0 ? (
+                            <div className=" flex items-center">
+                                <div className="container flex flex-col md:flex-row items-center justify-center text-gray-700">
+                                    <div className="max-w-lg">
+                                        <img src={Error} alt="Error" className="" />
                                     </div>
-                                    <div>
-                                        <div className="-mt-px flex divide-x divide-gray-200">
-                                            <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
-                                                <button onClick={() => handleDeleteClick(trainer.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                    Delete
-                                                </button>
+                                </div>
+                            </div >
+                        ) : (
+                            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-5">
+                                {filteredTrainers.map(trainer => (
+                                    <li key={trainer.id} className="col-span-1 cursor-pointer divide-y divide-gray-200 border border-gray-200 rounded-lg bg-white shadow">
+                                        <div className="flex w-full items-center justify-between space-x-6 p-6">
+                                            <div className="flex-1 truncate">
+                                                <div className="flex items-center space-x-3">
+                                                    <h3 className="truncate text-base font-bold text-[#000]">{trainer.fname.charAt(0).toUpperCase() + trainer.fname.slice(1)} {trainer.lastname}</h3>
+                                                </div>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Phone Number : {trainer.phone}</p>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Ville : {trainer.ville}</p>
+                                                <p className="mt-1 truncate text-sm text-gray-500">Joined At :  {new Date(trainer.created_at).toISOString().split('T')[0]}</p>
                                             </div>
-                                            <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
-                                                <button onClick={() => handleMoreClick(trainer.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-                                                    More
-                                                </button>
+                                            <img className="h-20 w-20 flex-shrink-0 rounded-full bg-gray-300" src={`http://localhost:8000/images/${trainer.img}`} alt={trainer.img} />
+                                        </div>
+                                        <div>
+                                            <div className="-mt-px flex divide-x divide-gray-200">
+                                                <div className="flex w-0 flex-1 cursor-pointer hover:bg-[#ff0000]">
+                                                    <button onClick={() => handleDeleteClick(trainer.id)} className="relative hover:text-white -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                                <div className="-ml-px flex w-0 flex-1 cursor-pointer hover:bg-gray-100">
+                                                    <button onClick={() => handleMoreClick(trainer.id)} className="relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+                                                        More
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
             </div>

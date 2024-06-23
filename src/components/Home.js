@@ -24,7 +24,7 @@ const Home = () => {
                 setTrainerCount(alltrainer.length);
             })
             .catch(error => console.error('There was an error Trainer!', error));
-    }, []);
+    }, [loggedInAdmin.ville, loggedInAdmin.username]);
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/members')
