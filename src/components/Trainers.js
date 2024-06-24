@@ -130,16 +130,18 @@ const Trainers = () => {
                                     <option key={trainer.id} >{`${trainer.fname} ${trainer.lastname}`}</option>
                                 ))}
                             </datalist>
-                            <select
-                                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-20 sm:w-40 ml-2 p-2.5"
-                                value={filterville}
-                                onChange={handleFltertvilleChange}
-                                required>
-                                <option value="">All Ville</option>
-                                {villes.map((ville) => (
-                                    <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
-                                ))}
-                            </select>
+                            {loggedInAdmin && loggedInAdmin.username.includes('admin') && (
+                                <select
+                                    className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-20 sm:w-40 ml-2 p-2.5"
+                                    value={filterville}
+                                    onChange={handleFltertvilleChange}
+                                    required>
+                                    <option value="">All Ville</option>
+                                    {villes.map((ville) => (
+                                        <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                    ))}
+                                </select>
+                            )}
                             <button
                                 onClick={PDFT}
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"

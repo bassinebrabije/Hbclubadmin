@@ -80,16 +80,10 @@ function Adda() {
             setShowAlert(true);
             setTimeout(() => {
                 setShowAlert(false);
-                /*window.location.href = '/Register';*/
-            }, 100000);
+                window.location.href = '/Register';
+            }, 2000);
 
-            // Logging values before sending the email
-            console.log('Sending admin email with the following details:');
-            console.log('Email:', email);
-            console.log('First Name:', fname);
-            console.log('Last Name:', lname);
-            console.log('Username:', `${lname}${fname}`);
-            console.log('Password:', password);
+
 
             await axios.post('http://localhost:8000/api/send-admin-email', {
                 email,
@@ -99,7 +93,7 @@ function Adda() {
                 password,
             });
 
-            /*closeModal();*/
+            closeModal();
         } catch (error) {
             console.error('There was an error!', error);
         }
@@ -166,7 +160,7 @@ function Adda() {
                                 <div className="flex space-x-4">
                                     <div className="flex-1">
                                         <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">Username</label>
-                                        <input type="text" id="username" value={`${lname}${fname}`} onChange={(e) => setUsername(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Username" required />
+                                        <input type="text" id="username" value={`${lname}_${fname}`} onChange={(e) => setUsername(e.target.value)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Username" required />
                                     </div>
                                     <div className="flex-1">
                                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Email</label>

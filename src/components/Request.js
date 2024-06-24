@@ -8,16 +8,22 @@ function Request() {
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/inscriptions')
-            .then(response => {
-                let sortedRequests = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                if (loggedInAdmin.username !== 'admin') {
-                    sortedRequests = sortedRequests.filter(request => request.ville === loggedInAdmin.ville);
-                }
-                setRequests(sortedRequests);
-            })
-            .catch(error => console.error('There was an error!', error));
+        const fetchRequests = () => {
+            axios.get('http://localhost:8000/api/inscriptions')
+                .then(response => {
+                    let sortedRequests = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    if (loggedInAdmin.username !== 'admin') {
+                        sortedRequests = sortedRequests.filter(request => request.ville === loggedInAdmin.ville);
+                    }
+                    setRequests(sortedRequests);
+                })
+                .catch(error => console.error('There was an error!', error));
+        };
+        fetchRequests();
+        const refreshInterval = setInterval(fetchRequests, 10000);
+        return () => clearInterval(refreshInterval);
     }, [loggedInAdmin.ville, loggedInAdmin.username]);
+
 
     const handleDeleteClick = (id) => {
         setRequestToDelete(id);

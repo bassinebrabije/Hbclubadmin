@@ -13,16 +13,23 @@ const AddCoaching = () => {
     const [coachingToDelete, setCoachingToDelete] = useState(null);
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
     useEffect(() => {
-        axios.get('http://localhost:8000/api/coaching')
-            .then(response => {
-                let sortedCoachings = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                if (loggedInAdmin.username !== 'admin') {
-                    sortedCoachings = sortedCoachings.filter(coaching => coaching.trainer.ville === loggedInAdmin.ville && coaching.member.ville === loggedInAdmin.ville);
-                }
-                setCoachings(sortedCoachings);
-            })
-            .catch(error => console.error('There was an error!', error));
+        const fetchCoachings = () => {
+            axios.get('http://localhost:8000/api/coaching')
+                .then(response => {
+                    let sortedCoachings = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    if (loggedInAdmin.username !== 'admin') {
+                        sortedCoachings = sortedCoachings.filter(coaching => coaching.trainer.ville === loggedInAdmin.ville && coaching.member.ville === loggedInAdmin.ville);
+                    }
+                    setCoachings(sortedCoachings);
+                })
+                .catch(error => console.error('There was an error!', error));
+        };
+
+        fetchCoachings();
+        const refreshInterval = setInterval(fetchCoachings, 10000);
+        return () => clearInterval(refreshInterval);
     }, [loggedInAdmin.ville, loggedInAdmin.username]);
+
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);

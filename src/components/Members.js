@@ -19,22 +19,34 @@ const Members = () => {
     const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/members')
-            .then(response => {
-                let sortedMembers = response.data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-                if (subscriptionType) {
-                    sortedMembers = sortedMembers.filter(member => member.subscription === subscriptionType);
-                }
-                if (filterville) {
-                    sortedMembers = sortedMembers.filter(member => member.ville === filterville);
-                }
-                if (loggedInAdmin.username !== 'admin') {
-                    sortedMembers = sortedMembers.filter(member => member.ville === loggedInAdmin.ville);
-                }
-                setMembers(sortedMembers);
-            })
-            .catch(error => console.error('There was an error!', error));
+        const fetchData = () => {
+            axios.get('http://localhost:8000/api/members')
+                .then(response => {
+                    let sortedMembers = response.data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                    if (subscriptionType) {
+                        sortedMembers = sortedMembers.filter(member => member.subscription === subscriptionType);
+                    }
+                    if (filterville) {
+                        sortedMembers = sortedMembers.filter(member => member.ville === filterville);
+                    }
+                    if (loggedInAdmin.username !== 'admin') {
+                        sortedMembers = sortedMembers.filter(member => member.ville === loggedInAdmin.ville);
+                    }
+                    setMembers(sortedMembers);
+                })
+                .catch(error => console.error('There was an error!', error));
+        };
+
+        // Fetch data initially
+        fetchData();
+
+        // Refresh data every 10 seconds (10000 milliseconds)
+        const refreshInterval = setInterval(fetchData, 10000); // 10 seconds interval
+
+        // Clean up interval on component unmount or dependencies change
+        return () => clearInterval(refreshInterval);
     }, [subscriptionType, filterville, loggedInAdmin.ville, loggedInAdmin.username]);
+
 
 
 
@@ -141,18 +153,19 @@ const Members = () => {
                                 <option value="Quarterly">Quarterly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
-                            <select
-                                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-20 sm:w-40 ml-2 p-2.5"
-                                value={filterville}
-                                onChange={handleFltertvilleChange}
-                                required>
-                                <option value="">All Ville</option>
-                                {villes.map((ville) => (
-                                    <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
-                                ))}
-                            </select>
+                            {loggedInAdmin && loggedInAdmin.username.includes('admin') && (
+                                <select
+                                    className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-20 sm:w-40 ml-2 p-2.5"
+                                    value={filterville}
+                                    onChange={handleFltertvilleChange}
+                                    required>
+                                    <option value="">All Ville</option>
+                                    {villes.map((ville) => (
+                                        <option key={ville.id} value={ville.ville} className='text-[#000]' >{ville.ville}</option>
+                                    ))}
+                                </select>
+                            )}
                             <button onClick={PDFM}
-
                                 className="ml-2 bg-[#FF0000] text-white text-sm p-2.5 rounded-lg"
                             >
                                 <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">

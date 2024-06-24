@@ -7,11 +7,16 @@ import { useNavigate } from 'react-router-dom';
 
 const Layout = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [username, setUsername] = useState('');
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [ville, setVille] = useState('');
+
     const [imgAdmin, setImgAdmin] = useState('');
     const [emailAdimn, setEmailAdmin] = useState('');
-    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
     const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+    const loggedInAdmin = JSON.parse(localStorage.getItem('admin'));
+
     const navigate = useNavigate();
 
     const toggleSidebar = () => {
@@ -40,7 +45,9 @@ const Layout = () => {
     useEffect(() => {
         const adminData = JSON.parse(localStorage.getItem('admin'));
         if (adminData) {
-            setUsername(adminData.username);
+            setFname(adminData.fname);
+            setLname(adminData.lname);
+            setVille(adminData.ville);
             setImgAdmin(adminData.imgadmin);
             setEmailAdmin(adminData.email);
         }
@@ -69,8 +76,9 @@ const Layout = () => {
                             </div>
                             <div className="flex items-center">
                                 <span className="hidden text-right lg:block">
-                                    <span className="block text-sm font-medium text-black">{emailAdimn}</span>
-                                    <span className="block text-xs font-medium ">{username}</span>
+                                    <span className="block text-xs font-medium "> {emailAdimn}</span>
+                                    <span className="block text-xs font-medium "> {fname} {lname}</span>
+                                    <span className="block text-xs font-medium ">{ville}</span>
                                 </span>
                                 <div className="flex items-center ms-3 tracking-wider hidden  sm:block ">
                                     <div type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" >
