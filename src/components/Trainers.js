@@ -20,19 +20,25 @@ const Trainers = () => {
 
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/trainers')
-            .then(response => {
-                let sortedTrainers = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                if (filterville) {
-                    sortedTrainers = sortedTrainers.filter(trainer => trainer.ville === filterville);
-                }
-                if (loggedInAdmin.username !== 'admin') {
-                    sortedTrainers = sortedTrainers.filter(trainer => trainer.ville === loggedInAdmin.ville);
-                }
-                setTrainers(sortedTrainers);
-            })
-            .catch(error => console.error('There was an error!', error));
-    }, [filterville, , loggedInAdmin.ville, loggedInAdmin.username]);
+        const fetchTrainers = () => {
+            axios.get('http://localhost:8000/api/trainers')
+                .then(response => {
+                    let sortedTrainers = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    if (filterville) {
+                        sortedTrainers = sortedTrainers.filter(trainer => trainer.ville === filterville);
+                    }
+                    if (loggedInAdmin.username !== 'admin') {
+                        sortedTrainers = sortedTrainers.filter(trainer => trainer.ville === loggedInAdmin.ville);
+                    }
+                    setTrainers(sortedTrainers);
+                })
+                .catch(error => console.error('There was an error!', error));
+        };
+        fetchTrainers();
+        const refreshInterval = setInterval(fetchTrainers, 10000);
+        return () => clearInterval(refreshInterval);
+    }, [filterville, loggedInAdmin.ville, loggedInAdmin.username]);
+
 
 
     useEffect(() => {

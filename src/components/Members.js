@@ -36,14 +36,8 @@ const Members = () => {
                 })
                 .catch(error => console.error('There was an error!', error));
         };
-
-        // Fetch data initially
         fetchData();
-
-        // Refresh data every 10 seconds (10000 milliseconds)
-        const refreshInterval = setInterval(fetchData, 10000); // 10 seconds interval
-
-        // Clean up interval on component unmount or dependencies change
+        const refreshInterval = setInterval(fetchData, 10000);
         return () => clearInterval(refreshInterval);
     }, [subscriptionType, filterville, loggedInAdmin.ville, loggedInAdmin.username]);
 
